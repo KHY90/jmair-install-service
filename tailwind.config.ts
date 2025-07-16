@@ -1,0 +1,19 @@
+import type { Config } from 'tailwindcss';
+
+const config: Config = {
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        manrope: ['var(--font-manrope)'],
+        'noto-sans': ['var(--font-noto-sans)'],
+      },
+    },
+  },
+  plugins: [require('@tailwindcss/container-queries')],
+};
+export default config;
