@@ -1,11 +1,11 @@
 export function GallerySection() {
   const images = [
-    '/images/01.webp',
-    '/images/02.webp',
-    '/images/clean.webp',
-    '/images/install.webp',
-    '/images/repair.webp',
-    '/images/banner.jpg',
+    "/images/001.jpg",
+    "/images/002.jpg",
+    "/images/003.jpg",
+    "/images/install.webp",
+    "/images/repair.webp",
+    "/images/banner.jpg",
   ];
 
   return (
