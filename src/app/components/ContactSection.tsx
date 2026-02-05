@@ -1,7 +1,7 @@
-'use client'
-import React, { useState, FormEvent, ChangeEvent, useEffect } from 'react'
-import { formatPhoneNumber, isValidPhoneNumber } from '../lib/validation'
-import { FaPaperPlane } from 'react-icons/fa'
+"use client";
+import React, { useState, FormEvent, ChangeEvent, useEffect } from "react";
+import { formatPhoneNumber, isValidPhoneNumber } from "../lib/validation";
+import { FaPaperPlane } from "react-icons/fa";
 
 interface DaumPostcodeData {
   zonecode: string;
@@ -28,98 +28,106 @@ declare global {
 }
 
 export default function ContactSection() {
-  const [name, setName] = useState('')
-  const [phone, setPhone] = useState('')
-  const [postcode, setPostcode] = useState('')
-  const [address, setAddress] = useState('')
-  const [addressDetail, setAddressDetail] = useState('')
-  const [inquiry, setInquiry] = useState('')
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [postcode, setPostcode] = useState("");
+  const [address, setAddress] = useState("");
+  const [addressDetail, setAddressDetail] = useState("");
+  const [inquiry, setInquiry] = useState("");
 
-  const [phoneError, setPhoneError] = useState('')
-  const [addressError, setAddressError] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [isConsentChecked, setIsConsentChecked] = useState(false)
+  const [phoneError, setPhoneError] = useState("");
+  const [addressError, setAddressError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [isConsentChecked, setIsConsentChecked] = useState(false);
 
   useEffect(() => {
-    const script = document.createElement('script')
-    script.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
-    script.async = true
-    document.head.appendChild(script)
-  }, [])
+    const script = document.createElement("script");
+    script.src =
+      "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+    script.async = true;
+    document.head.appendChild(script);
+  }, []);
 
   const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPhoneNumber(e.target.value)
-    setPhone(formatted)
+    const formatted = formatPhoneNumber(e.target.value);
+    setPhone(formatted);
 
     if (formatted && !isValidPhoneNumber(formatted)) {
-      setPhoneError('올바른 휴대폰 번호 형식(010-XXXX-XXXX)이 아닙니다.')
+      setPhoneError("올바른 휴대폰 번호 형식(010-XXXX-XXXX)이 아닙니다.");
     } else {
-      setPhoneError('')
+      setPhoneError("");
     }
-  }
+  };
 
   const handleAddressSearch = () => {
     if (window.daum && window.daum.Postcode) {
       new window.daum.Postcode({
         oncomplete: (data: DaumPostcodeData) => {
-          setPostcode(data.zonecode)
-          setAddress(data.address)
-          setAddressError('')
-          document.getElementById('addressDetail')?.focus()
+          setPostcode(data.zonecode);
+          setAddress(data.address);
+          setAddressError("");
+          document.getElementById("addressDetail")?.focus();
         },
-      }).open()
+      }).open();
     } else {
-      alert('주소 검색 서비스를 불러오는 중입니다. 잠시 후 다시 시도해주세요.')
+      alert("주소 검색 서비스를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
     }
-  }
+  };
 
   const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!isValidPhoneNumber(phone)) {
-      setPhoneError('올바른 휴대폰 번호 형식(010-XXXX-XXXX)을 입력해주세요.')
-      return
+      setPhoneError("올바른 휴대폰 번호 형식(010-XXXX-XXXX)을 입력해주세요.");
+      return;
     }
     if (!address) {
-      setAddressError('주소를 검색해주세요.')
-      return
+      setAddressError("주소를 검색해주세요.");
+      return;
     }
     if (!isConsentChecked) {
-      alert('개인정보 수집 및 이용에 동의해야 문의를 접수할 수 있습니다.')
-      return
+      alert("개인정보 수집 및 이용에 동의해야 문의를 접수할 수 있습니다.");
+      return;
     }
 
-    setLoading(true)
-    setPhoneError('')
-    setAddressError('')
+    setLoading(true);
+    setPhoneError("");
+    setAddressError("");
 
     try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, phone, postcode, address, addressDetail, inquiry }),
-      })
-      const data = await res.json()
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          phone,
+          postcode,
+          address,
+          addressDetail,
+          inquiry,
+        }),
+      });
+      const data = await res.json();
 
       if (res.ok) {
-        alert(data.message)
-        setName('')
-        setPhone('')
-        setPostcode('')
-        setAddress('')
-        setAddressDetail('')
-        setInquiry('')
-        setIsConsentChecked(false)
+        alert(data.message);
+        setName("");
+        setPhone("");
+        setPostcode("");
+        setAddress("");
+        setAddressDetail("");
+        setInquiry("");
+        setIsConsentChecked(false);
       } else {
-        alert(`오류: ${data.message}`)
+        alert(`오류: ${data.message}`);
       }
     } catch (err) {
-      console.error(err)
-      alert('오류: 메일 전송에 실패했습니다.')
+      console.error(err);
+      alert("오류: 메일 전송에 실패했습니다.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <section id="contact" className="py-20 bg-gray-50">
@@ -129,13 +137,18 @@ export default function ContactSection() {
           제공하신 정보는 상담 후 바로 폐기됩니다.
         </p> */}
         <p className="text-center font-bold text-red-400 mb-8">
-          저희 서비스는 경기 북부 및 서울 지역에 한해 제공됩니다.
+          저희 서비스는 경기 북부(양주, 의정부, 남양주, 포천, 파주 등) 및
+          서울(도봉구, 노원구, 강북구, 은평구, 성북구, 종로구 등) 지역에 한해
+          제공됩니다.
         </p>
         <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
           <form onSubmit={handleSubmit}>
             {/* 이름 */}
             <div className="mb-4">
-              <label htmlFor="name" className="block text-gray-700 font-bold mb-2">
+              <label
+                htmlFor="name"
+                className="block text-gray-700 font-bold mb-2"
+              >
                 이름
               </label>
               <input
@@ -150,7 +163,10 @@ export default function ContactSection() {
 
             {/* 연락처 */}
             <div className="mb-4">
-              <label htmlFor="phone" className="block text-gray-700 font-bold mb-2">
+              <label
+                htmlFor="phone"
+                className="block text-gray-700 font-bold mb-2"
+              >
                 연락처
               </label>
               <input
@@ -160,9 +176,11 @@ export default function ContactSection() {
                 onChange={handlePhoneChange}
                 className={`
                   w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2
-                  ${phoneError
-                    ? 'border-red-500 focus:ring-red-500'
-                    : 'focus:ring-lime-500'}
+                  ${
+                    phoneError
+                      ? "border-red-500 focus:ring-red-500"
+                      : "focus:ring-lime-500"
+                  }
                 `}
                 required
                 maxLength={13}
@@ -175,7 +193,10 @@ export default function ContactSection() {
 
             {/* 주소 */}
             <div className="mb-4">
-              <label htmlFor="address" className="block text-gray-700 font-bold mb-2">
+              <label
+                htmlFor="address"
+                className="block text-gray-700 font-bold mb-2"
+              >
                 설치 주소
               </label>
               <div className="flex items-center space-x-2">
@@ -200,7 +221,7 @@ export default function ContactSection() {
                 id="address"
                 value={address}
                 placeholder="주소"
-                className={`w-full mt-2 px-3 py-2 border rounded-lg bg-gray-100 focus:outline-none ${addressError ? 'border-red-500' : ''}`}
+                className={`w-full mt-2 px-3 py-2 border rounded-lg bg-gray-100 focus:outline-none ${addressError ? "border-red-500" : ""}`}
                 readOnly
               />
               <input
@@ -218,7 +239,10 @@ export default function ContactSection() {
 
             {/* 문의 내용 */}
             <div className="mb-6">
-              <label htmlFor="inquiry" className="block text-gray-700 font-bold mb-2">
+              <label
+                htmlFor="inquiry"
+                className="block text-gray-700 font-bold mb-2"
+              >
                 문의 내용
               </label>
               <textarea
@@ -229,10 +253,10 @@ export default function ContactSection() {
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500"
                 required
                 placeholder={
-    "설치 요청 사항을 작성해주세요.\n" +
-    "예) 벽걸이 에어컨 설치 요청\n" +
-    "추가로 필요한 사항을 자유롭게 작성해주세요."
-  }
+                  "설치 요청 사항을 작성해주세요.\n" +
+                  "예) 벽걸이 에어컨 설치 요청\n" +
+                  "추가로 필요한 사항을 자유롭게 작성해주세요."
+                }
               ></textarea>
             </div>
 
@@ -247,7 +271,10 @@ export default function ContactSection() {
                   required
                 />
                 <span className="ml-2 text-sm text-gray-700">
-                  개인정보 수집 및 이용 동의 (필수) : 본인은 상담을 위해 이름, 연락처, 주소, 문의 내용을 수집 및 이용하는 것에 동의합니다. 수집된 정보는 상담 목적으로만 사용되며, 상담 완료 후 즉시 폐기됩니다.
+                  개인정보 수집 및 이용 동의 (필수) : 본인은 상담을 위해 이름,
+                  연락처, 주소, 문의 내용을 수집 및 이용하는 것에 동의합니다.
+                  수집된 정보는 상담 목적으로만 사용되며, 상담 완료 후 즉시
+                  폐기됩니다.
                 </span>
               </label>
             </div>
@@ -275,5 +302,5 @@ export default function ContactSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export default function Footer() {
   return (
@@ -8,9 +8,7 @@ export default function Footer() {
         <h3 className="text-2xl font-semibold">진명에어컨 이전설치</h3>
 
         {/* 연락처 */}
-        <p className="text-base">
-            H.P: 010-1234-5678&nbsp;|&nbsp;
-        </p>
+        {/* <p className="text-base">H.P: 010-1234-5678&nbsp;|&nbsp;</p> */}
 
         {/* 저작권 */}
         <p className="text-sm text-gray-600">
@@ -18,11 +16,11 @@ export default function Footer() {
         </p>
 
         {/* 사업자 정보 */}
-        <p className="text-sm text-gray-600">
+        {/* <p className="text-sm text-gray-600">
           상호: 진명에어컨&nbsp;|&nbsp;
           사업자 등록번호: 000-00-0000&nbsp;|&nbsp;
           대표자: 진명에어컨
-        </p>
+        </p> */}
       </div>
     </footer>
   );
